@@ -2,7 +2,7 @@
 
 include './models/empleado.php';
 
-class EmpleadoController
+class EmpleadoController implements IApiUsable
 {
     public function Insertar($request, $response, $args)
     {
@@ -69,12 +69,28 @@ class EmpleadoController
             $empleado->estado = $parametros['estado'];
 
             Empleado::ModificarEmpleado($empleado);
-            $payload = json_encode(array("mensaje" => "Producto modificado con exito."));
+            $payload = json_encode(array("mensaje" => "Empleado modificado con exito."));
         }
         else
         {
-            $payload = json_encode(array("error" => "No se pudo modificar el producto."));
+            $payload = json_encode(array("error" => "No se pudo modificar el empleado."));
         }
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+    }
+
+    public function Borrar($request, $response, $args)
+    {
+        $parametros = $request->getParsedBody();
+
+        $empleadoId = $parametros['id'];
+        $empleado = Empleado::TraerUno($empleadoId);
+        $empleado->estado = "Inactivo";
+        Empleado::BorrarEmpleado($empleado);
+
+        $payload = json_encode(array("mensaje" => "Empleado borrado con exito"));
 
         $response->getBody()->write($payload);
         return $response

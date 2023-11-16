@@ -8,17 +8,17 @@ class Producto
     public $nombre;
     public $precio;
     public $tipo; 
-    public $tiempo;
+    public $estado;
 
     public static function InsertarProducto($producto)
     {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
-        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into productos (nombre,precio,tipo,tiempo)values(:nombre,:precio,:tipo,:tiempo)");
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into productos (nombre,precio,tipo,estado)values(:nombre,:precio,:tipo,:estado)");
         $consulta->bindValue(':nombre', $producto->nombre);
         $consulta->bindValue(':precio', $producto->precio);
         $consulta->bindValue(':tipo', $producto->tipo);
-        $consulta->bindValue(':tiempo', $producto->tiempo);
+        $consulta->bindValue(':estado', $producto->estado);
         $consulta->execute();
     }
 
@@ -45,11 +45,10 @@ class Producto
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productos SET nombre = :nombre, precio = :precio, tipo = :tipo, tiempo = :tiempo WHERE id = :id");
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productos SET nombre = :nombre, precio = :precio, tipo = :tipo WHERE id = :id");
         $consulta->bindValue(':nombre', $producto->nombre);
         $consulta->bindValue(':precio', $producto->precio);
         $consulta->bindValue(':tipo', $producto->tipo);
-        $consulta->bindValue(':tiempo', $producto->tiempo);
         $consulta->bindValue(':id', $producto->id);
         $consulta->execute();
     }
@@ -57,10 +56,9 @@ class Producto
     public static function BorrarProducto($producto)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productos SET fechaBaja = :fechaBaja WHERE id = :id");
-        $fecha = new DateTime(date("d-m-Y"));
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productos SET estado = :estado WHERE id = :id");
         $consulta->bindValue(':id', $producto->id);
-        $consulta->bindValue(':fechaBaja', date_format($fecha, 'Y-m-d H:i:s'));
+        $consulta->bindValue(':estado', $producto->estado);
         $consulta->execute();
     }
 

@@ -41,7 +41,7 @@ $app->group('/productos', function (RouteCollectorProxy $group)
     $group->get('/{id}', \ProductoController::class . ':TraerUno');
     $group->post('[/]', \ProductoController::class . ':Insertar');
     $group->put('/{id}', \ProductoController::class . ':Modificar');
-    $group->delete('/{id}', \ProductoController::class . ':Eliminar');
+    $group->delete('[/]', \ProductoController::class . ':Borrar');
 });
 
 $app->group('/empleados', function (RouteCollectorProxy $group) 
@@ -50,7 +50,7 @@ $app->group('/empleados', function (RouteCollectorProxy $group)
     $group->get('/{id}', \EmpleadoController::class . ':TraerUno');
     $group->post('[/]', \EmpleadoController::class . ':Insertar');
     $group->put('/{id}', \EmpleadoController::class . ':Modificar');
-    $group->delete('/{id}', \EmpleadoController::class . ':Eliminar');
+    $group->delete('[/]', \EmpleadoController::class . ':Borrar');
 })->add(new AuthMiddleware());
 //->add(new AuthMiddleware());LoggerMiddleware
 
@@ -60,7 +60,7 @@ $app->group('/pedidos', function (RouteCollectorProxy $group)
     $group->get('/{id}', \PedidoController::class . ':TraerUno');
     $group->post('[/]', \PedidoController::class . ':Insertar');
     $group->put('/{id}', \PedidoController::class . ':Modificar');
-    $group->delete('/{id}', \PedidoController::class . ':Eliminar');
+    $group->delete('[/]', \PedidoController::class . ':Borrar');
 });
 
 $app->group('/mesas', function (RouteCollectorProxy $group) 
@@ -69,7 +69,7 @@ $app->group('/mesas', function (RouteCollectorProxy $group)
     $group->get('/{id}', \MesaController::class . ':TraerUno');
     $group->post('[/]', \MesaController::class . ':Insertar');
     $group->put('/{id}', \MesaController::class . ':Modificar');
-    $group->delete('/{id}', \MesaController::class . ':Eliminar');
+    $group->delete('[/]', \MesaController::class . ':Borrar');
 })->add(new AuthMiddleware("Mozo"));;
 
 $app->group('/encuestas', function (RouteCollectorProxy $group) 
@@ -78,7 +78,7 @@ $app->group('/encuestas', function (RouteCollectorProxy $group)
     $group->get('/{id}', \EncuestaController::class . ':TraerUno');
     $group->post('[/]', \EncuestaController::class . ':Insertar');
     $group->put('/{id}', \EncuestaController::class . ':Modificar');
-    $group->delete('/{id}', \EncuestaController::class . ':Eliminar');
+    $group->delete('[/]', \EncuestaController::class . ':Borrar');
 })->add(new AuthMiddleware());
 
 $app->group('/productopedido', function (RouteCollectorProxy $group) 
@@ -87,7 +87,7 @@ $app->group('/productopedido', function (RouteCollectorProxy $group)
     $group->get('/{id}', \ProductoPedidoController::class . ':TraerUno');
     $group->post('[/]', \ProductoPedidoController::class . ':Insertar');
     $group->put('/{id}', \ProductoPedidoController::class . ':Modificar');
-    $group->delete('/{id}', \ProductoPedidoController::class . ':Eliminar');
+    $group->delete('[/]', \ProductoPedidoController::class . ':Borrar');
 });
 
 $app->run();

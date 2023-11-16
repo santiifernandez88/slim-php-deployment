@@ -1,9 +1,10 @@
 <?php
 
 include './models/producto.php';
+include './interfaces/IApiUsable.php';
 
 
-class ProductoController
+class ProductoController implements IApiUsable
 {
     public function Insertar($request, $response, $args)
     {
@@ -17,6 +18,7 @@ class ProductoController
             $producto->precio = $parametros['precio'];
             $producto->tipo = $parametros['tipo'];
             $producto->tiempo = $parametros['tiempo'];
+            $prdoducto->estado = "Activo";
             Producto::InsertarProducto($producto);
             $payload = json_encode(array("mensaje" => "Producto creado con exito."));
         }
@@ -80,6 +82,20 @@ class ProductoController
           ->withHeader('Content-Type', 'application/json');
     }
 
+    public function Borrar($request, $response, $args)
+    {
+        $parametros = $request->getParsedBody();
+        $productoId = $parametros['id'];
+        $producto = Producto::TraerUno($productoId);
+        $producto->estado = "Inactivo";
+        Producto::BorrarProducto($producto);
+
+        $payload = json_encode(array("mensaje" => "Usuario borrado con exito"));
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+    }
 
 
     public function ValidarTipo($tipo)

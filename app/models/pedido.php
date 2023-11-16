@@ -4,7 +4,6 @@ class Pedido
 {
     public $id;
     public $nombreCliente;
-    //public $idProductoPedido; -- ARRAYS DE PRODUCTOS PEDIDOS
     public $totalPrecio;
     public $estado;
     public $tiempoEstimado;
@@ -62,7 +61,7 @@ class Pedido
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objAccesoDato->RetornarConsulta("UPDATE pedidos SET estado = :estado WHERE id = :id");
         $consulta->bindValue(':id', $pedido->id);
-        $consulta->bindValue(':estado', "Cancelado");
+        $consulta->bindValue(':estado', $pedido->estado);
         $consulta->execute();
     }
 

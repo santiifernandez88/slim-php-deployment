@@ -10,12 +10,13 @@ class Encuesta
     public $puntuacionMozo;
     public $puntuacionCocinero;
     public $puntuacionRestaurant;
+    public $estado;
 
     public static function InsertarEncuesta($encuesta)
     {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
-        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into encuestas (idMesa,nombreCliente,descripcion,puntuacionMesa,puntuacionMozo,puntuacionCocinero,puntuacionRestaurant)values(:idMesa,:nombreCliente,:descripcion,:puntuacionMesa,:puntuacionMozo,:puntuacionCocinero,:puntuacionRestaurant)");
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into encuestas (idMesa,nombreCliente,descripcion,puntuacionMesa,puntuacionMozo,puntuacionCocinero,puntuacionRestaurant,estado)values(:idMesa,:nombreCliente,:descripcion,:puntuacionMesa,:puntuacionMozo,:puntuacionCocinero,:puntuacionRestaurant,:estado)");
         $consulta->bindValue(':idMesa', $encuesta->idMesa);
         $consulta->bindValue(':nombreCliente', $encuesta->nombreCliente);
         $consulta->bindValue(':descripcion', $encuesta->descripcion);
@@ -23,6 +24,7 @@ class Encuesta
         $consulta->bindValue(':puntuacionMozo', $encuesta->puntuacionMozo);
         $consulta->bindValue(':puntuacionCocinero', $encuesta->puntuacionCocinero);
         $consulta->bindValue(':puntuacionRestaurant', $encuesta->puntuacionRestaurant);
+        $consulta->bindValue(':estado', $encuesta->estado);
         $consulta->execute();
     }
 
@@ -60,13 +62,12 @@ class Encuesta
         $consulta->execute();
     }
 
-    public static function BorrarProducto($producto)
+    public static function BorrarEncuesta($encuesta)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productos SET fechaBaja = :fechaBaja WHERE id = :id");
-        $fecha = new DateTime(date("d-m-Y"));
-        $consulta->bindValue(':id', $producto->id);
-        $consulta->bindValue(':fechaBaja', date_format($fecha, 'Y-m-d H:i:s'));
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE encuestas SET estado = :estado WHERE id = :id");
+        $consulta->bindValue(':id', $encuesta->id);
+        $consulta->bindValue(':estado', $encuesta->estado);
         $consulta->execute();
     }
 }

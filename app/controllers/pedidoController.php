@@ -3,21 +3,21 @@
 include './models/pedido.php';
 
 
-class PedidoController
+class PedidoController implements IApiUsable
 {
     public function Insertar($request, $response, $args)
     {
 
         $parametros = $request->getParsedBody();
 
-        if(isset($parametros['nombreCliente']) && isset($parametros['totalPrecio']) && isset($parametros['tiempoEstimado']) && isset($parametros['numeroMesa']))
+        if(isset($parametros['nombreCliente']) && isset($parametros['totalPrecio']) && isset($parametros['numeroMesa']))
         {
             $pedido = new Pedido();
             $pedido->id = self::GenerarId();
             $pedido->nombreCliente = $parametros['nombreCliente']; // aca esta igual y anda
             $pedido->totalPrecio = $parametros['totalPrecio'];
             $pedido->estado = "Preparacion";
-            $pedido->tiempoEstimado = $parametros['tiempoEstimado'];
+            $pedido->tiempoEstimado = 0;
             $pedido->numeroMesa = $parametros['numeroMesa'];
             Pedido::InsertarPedido($pedido);
             $payload = json_encode(array("mensaje" => "Pedido creado con exito"));
@@ -72,11 +72,11 @@ class PedidoController
             $pedido->numeroMesa = $parametros['numeroMesa'];
 
             Pedido::ModificarPedido($pedido);
-            $payload = json_encode(array("mensaje" => "Producto modificado con exito."));
+            $payload = json_encode(array("mensaje" => "Pedido modificado con exito."));
         }
         else
         {
-            $payload = json_encode(array("error" => "No se pudo modificar el producto."));
+            $payload = json_encode(array("error" => "No se pudo modificar el pedido."));
         }
 
         $response->getBody()->write($payload);
@@ -84,13 +84,14 @@ class PedidoController
           ->withHeader('Content-Type', 'application/json');
     }
 
-    public function Eliminar($request, $response, $args)
+    public function Borrar($request, $response, $args)
     {
-        $id = $args['id'];
+        $parametros = $rquest->getParsedBody();
+        $id = $parametros['id'];
         $pedido = Pedido::TraerUno($id);
-
+        $pedido->estado = "Cancelado";
         Pedido::BorrarPedido($pedido);
-        $payload = json_encode(array("mensaje" => "Usuario borrado con exito"));
+        $payload = json_encode(array("mensaje" => "Pedido borrado con exito"));
 
         $response->getBody()->write($payload);
         return $response

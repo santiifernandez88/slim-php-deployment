@@ -3,7 +3,8 @@
 include './models/mesa.php';
 
 
-class MesaController
+
+class MesaController implements IApiUsable
 {
     public function Insertar($request, $response, $args)
     {
@@ -53,7 +54,6 @@ class MesaController
           ->withHeader('Content-Type', 'application/json');
     }
 
-    
     public function Modificar($request, $response, $args)
     {
         $parametros = $request->getParsedBody();
@@ -80,11 +80,25 @@ class MesaController
     }
 
 
+    public function Borrar($request, $response, $args)
+    {
+        $parametros = $request->getParsedBody();
+        $mesaId = $parametros['id'];
 
+        $mesa = Mesa::TraerUno($mesaId);
+        $mesa->estado = "Cerrado";
+        Mesa::BorrarMesa($mesa);
+
+        $payload = json_encode(array("mensaje" => "Mesa borrado con exito"));
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+    }
 
     public function ValidarEstado($estado)
     {
-        if($estado === "Esperando" || $estado === "Comiendo" || $estado === "Pagando" || $estado === "Cerrando")
+        if($estado === "Esperando" || $estado === "Comiendo" || $estado === "Pagando" || $estado === "Cerrado")
         {
             return true;
         }

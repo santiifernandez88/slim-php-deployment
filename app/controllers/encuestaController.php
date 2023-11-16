@@ -3,7 +3,8 @@
 include './models/encuesta.php';
 
 
-class EncuestaController
+
+class EncuestaController implements IApiUsable
 {
     public function Insertar($request, $response, $args)
     {
@@ -21,6 +22,7 @@ class EncuestaController
             $encuesta->puntuacionMozo = $parametros['puntuacionMozo'];
             $encuesta->puntuacionCocinero = $parametros['puntuacionCocinero'];
             $encuesta->puntuacionRestaurant = $parametros['puntuacionRestaurant'];
+            $encuesta->estado = "Activo";
             Encuesta::InsertarEncuesta($encuesta);
             $payload = json_encode(array("mensaje" => "Encuesta creado con exito."));
         }
@@ -82,6 +84,22 @@ class EncuestaController
         {
             $payload = json_encode(array("error" => "No se pudo modificar el producto."));
         }
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+    }
+
+    public function Borrar($request, $response, $args)
+    {
+        $parametros = $request->getParsedBody();
+
+        $encuestaId = $parametros['id'];
+        $encuesta = Encuesta::TraerUno($encuestaId);
+        $encuesta->estado = "Inactivo";
+        Encuesta::BorrarEncuesta($encuesta);
+
+        $payload = json_encode(array("mensaje" => "Encuesta borrado con exito"));
 
         $response->getBody()->write($payload);
         return $response

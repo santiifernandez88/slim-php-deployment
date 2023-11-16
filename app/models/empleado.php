@@ -52,13 +52,12 @@ class Empleado
         $consulta->execute();
     }
 
-    public static function BorrarProducto($producto)
+    public static function BorrarEmpleado($empleado)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productos SET fechaBaja = :fechaBaja WHERE id = :id");
-        $fecha = new DateTime(date("d-m-Y"));
-        $consulta->bindValue(':id', $producto->id);
-        $consulta->bindValue(':fechaBaja', date_format($fecha, 'Y-m-d H:i:s'));
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE empleados SET estado = :estado WHERE id = :id");
+        $consulta->bindValue(':id', $empleado->id);
+        $consulta->bindValue(':estado', $empleado->estado);
         $consulta->execute();
     }
 }
