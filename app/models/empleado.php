@@ -2,6 +2,8 @@
 
 class Empleado
 {
+    public $usuario;
+    public $contraseña;
     public $id;
     public $rol;
     public $nombre;

@@ -42,7 +42,7 @@ class Pedido
         return $consulta->fetchObject('Pedido');
     }
 
-    public static function modificarPedido($pedido)
+    public static function ModificarPedido($pedido)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
@@ -64,6 +64,17 @@ class Pedido
         $consulta->bindValue(':estado', $pedido->estado);
         $consulta->execute();
     }
+
+    public static function ModificarPedidoEstadoTiempo($pedido)
+    {
+        $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE pedidos SET estado = :estado, tiempoEstimado = :tiempoEstimado WHERE id = :id");
+        $consulta->bindValue(':id', $pedido->id);
+        $consulta->bindValue(':estado', $pedido->estado);
+        $consulta->bindValue(':tiempoEstimado', $pedido->tiempoEstimado);
+        $consulta->execute();
+    }
+
 
 }
 

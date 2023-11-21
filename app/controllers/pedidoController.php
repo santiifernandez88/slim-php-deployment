@@ -1,6 +1,8 @@
 <?php
 
 include './models/pedido.php';
+//include './models/ProductoPedido.php';
+//include './controllers/ProductoPedidoController.php';
 
 
 class PedidoController implements IApiUsable
@@ -16,7 +18,7 @@ class PedidoController implements IApiUsable
             $pedido->id = self::GenerarId();
             $pedido->nombreCliente = $parametros['nombreCliente']; // aca esta igual y anda
             $pedido->totalPrecio = $parametros['totalPrecio'];
-            $pedido->estado = "Preparacion";
+            $pedido->estado = "Pendiente";
             $pedido->tiempoEstimado = 0;
             $pedido->numeroMesa = $parametros['numeroMesa'];
             Pedido::InsertarPedido($pedido);
@@ -62,13 +64,10 @@ class PedidoController implements IApiUsable
         $id = $args['id'];
         $pedido = Pedido::TraerUno($id);
 
-        if(isset($parametros['nombreCliente']) && isset($parametros['totalPrecio']) && isset($parametros['estado']) && isset($parametros['tiempoEstimado']) 
-        && isset($parametros['numeroMesa']) && self::ValidarEstado($parametros['estado']))
+        if(isset($parametros['nombreCliente']) && isset($parametros['totalPrecio']) && isset($parametros['numeroMesa']))
         {
             $pedido->nombreCliente = $parametros['nombreCliente'];
             $pedido->totalPrecio = $parametros['totalPrecio'];
-            $pedido->estado = $parametros['estado'];
-            $pedido->tiempoEstimado = $parametros['tiempoEstimado'];
             $pedido->numeroMesa = $parametros['numeroMesa'];
 
             Pedido::ModificarPedido($pedido);
@@ -97,6 +96,23 @@ class PedidoController implements IApiUsable
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
+
+    public function ModificarEstadoTiempo($request, $response, $args)
+    {    
+        $id = $args['id'];
+        $pedido = Pedido::TraerUno($id);
+
+        $pedido->estado = ProductoPedidoController::EvaluarEstado($pedido->id);
+        $pedido->tiempoEstimado = ProductoPedidoController::EvaluarTiempo($pedido->id);
+
+        Pedido::ModificarPedidoEstadoTiempo($pedido);
+        $payload = json_encode(array("mensaje" => "Pedido modificado con exito."));
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+    }
+
 
     public function GenerarId()
     {

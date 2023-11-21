@@ -19,6 +19,7 @@ include './controllers/encuestaController.php';
 include './controllers/empleadoController.php';
 include './controllers/mesaController.php';
 include './controllers/ProductoPedidoController.php';
+include './controllers/archivoController.php';
 //include './middlewares/loggerMiddleware.php';
 include './middlewares/authMiddleware.php';
 
@@ -59,8 +60,14 @@ $app->group('/pedidos', function (RouteCollectorProxy $group)
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
     $group->get('/{id}', \PedidoController::class . ':TraerUno');
     $group->post('[/]', \PedidoController::class . ':Insertar');
-    $group->put('/{id}', \PedidoController::class . ':Modificar');
+    //$group->put('/{id}', \PedidoController::class . ':Modificar');
+    //$group->put('/{id}', \PedidoController::class . ':ModificarEstadoTiempo');
     $group->delete('[/]', \PedidoController::class . ':Borrar');
+});
+
+$app->group('/pedidos', function (RouteCollectorProxy $group) 
+{
+    $group->put('/{id}', \PedidoController::class . ':ModificarEstadoTiempo');
 });
 
 $app->group('/mesas', function (RouteCollectorProxy $group) 
@@ -89,6 +96,13 @@ $app->group('/productopedido', function (RouteCollectorProxy $group)
     $group->put('/{id}', \ProductoPedidoController::class . ':Modificar');
     $group->delete('[/]', \ProductoPedidoController::class . ':Borrar');
 });
+
+$app->group('/csv', function (RouteCollectorProxy $group) 
+{
+    $group->post('/Cargar', \ArchivoController::class . ':CargarCSV');
+    $group->post('/Descargar', \ArchivoController::class . ':DescargarCSV');
+});
+
 
 $app->run();
 

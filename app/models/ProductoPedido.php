@@ -5,6 +5,7 @@ class ProductoPedido
     public $id; 
     public $idProducto;
     public $idPedido;
+    public $idEmpleado;
     public $cantidad;
     public $tiempo;
     public $estado;

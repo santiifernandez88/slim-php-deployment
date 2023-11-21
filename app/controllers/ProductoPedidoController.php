@@ -125,6 +125,26 @@ class ProductoPedidoController  implements IApiUsable
         return $acumuladorTiempo;
     }
 
+    public static function EvaluarEstado($idPedido)
+    {       
+        $productoPedidos = ProductoPedido::TraerTodos();
+        
+        foreach($productoPedidos as $productos)
+        {
+            if($productos->idPedido == $idPedido && $productos->idEmpleado > 0 && $productos->estado != "Cancelado")
+            {
+                $estadoPedido = "Preparacion";
+                if($productos->estado == "Realizado")
+                {
+                    $estadoPedido = "Entregado";
+                }
+                break;
+            }
+        }
+
+        return $estadoPedido;
+    }
+
 }
 
 
