@@ -3,7 +3,7 @@
 class Empleado
 {
     public $usuario;
-    public $contraseña;
+    public $contrasenia;
     public $id;
     public $rol;
     public $nombre;
@@ -14,10 +14,12 @@ class Empleado
     {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
-        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into empleados (rol,nombre,disponible,estado)values(:rol,:nombre,:disponible,:estado)");
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into empleados (rol,nombre,disponible,usuario,contrasenia,estado)values(:rol,:nombre,:disponible,:usuario,:contrasenia,:estado)");
         $consulta->bindValue(':rol', $empleado->rol);
         $consulta->bindValue(':nombre', $empleado->nombre);
         $consulta->bindValue(':disponible', $empleado->disponible);
+        $consulta->bindValue(':usuario', $empleado->usuario);
+        $consulta->bindValue(':contrasenia', $empleado->contrasenia);
         $consulta->bindValue(':estado', $empleado->estado);
         $consulta->execute();
     }
@@ -61,6 +63,16 @@ class Empleado
         $consulta->bindValue(':id', $empleado->id);
         $consulta->bindValue(':estado', $empleado->estado);
         $consulta->execute();
+    }
+
+    public static function TraerUsuarioPorLogin($usuario, $contrasenia)
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * from empleados where usuario = :usuario AND contrasenia = :contrasenia");
+        $consulta->bindValue(':usuario', $usuario);
+        $consulta->bindValue(':contrasenia', $contrasenia);
+        $consulta->execute();
+        return $consulta->fetchObject('Empleado');
     }
 }
 

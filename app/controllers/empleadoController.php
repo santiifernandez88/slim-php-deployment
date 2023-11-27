@@ -9,12 +9,14 @@ class EmpleadoController implements IApiUsable
 
         $parametros = $request->getParsedBody();
 
-        if(isset($parametros['rol']) && isset($parametros['nombre']) && isset($parametros['disponible']) && isset($parametros['estado']) && self::ValidarDisponibilidad($parametros['disponible']))
+        if(isset($parametros['rol']) && isset($parametros['nombre']) && isset($parametros['disponible']) && isset($parametros['usuario']) && isset($parametros['contrasenia']) && isset($parametros['estado']) && self::ValidarDisponibilidad($parametros['disponible']))
         {
             $empleado = new Empleado();
             $empleado->rol = $parametros['rol'];
             $empleado->nombre = $parametros['nombre'];
             $empleado->disponible = $parametros['disponible'];
+            $empleado->usuario = $parametros['usuario'];
+            $empleado->contrasenia = $parametros['contrasenia'];
             $empleado->estado = $parametros['estado'];
             Empleado::InsertarEmpleado($empleado);
             $payload = json_encode(array("mensaje" => "Empleado creado con exito."));

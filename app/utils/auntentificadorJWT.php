@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 
 class AutentificadorJWT
 {
-    private static $claveSecreta = 'T3sT$JWT';
+    private static $claveSecreta = 'TxsT$JWT';
     private static $tipoEncriptacion = ['HS256'];
 
     public static function CrearToken($datos)
@@ -36,6 +36,19 @@ class AutentificadorJWT
         }
         if ($decodificado->aud !== self::Aud()) {
             throw new Exception("No es el usuario valido");
+        }
+    }
+
+    public static function VerificarTipo($token, $rol)
+    {
+        $data = AutentificadorJWT::ObtenerData($token);
+        if($data->rol == $rol) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

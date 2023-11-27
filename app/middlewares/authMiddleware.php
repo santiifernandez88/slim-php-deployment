@@ -16,11 +16,10 @@ class AuthMiddleware
 
     public function __invoke(Request $request, RequestHandler $handler): Response
     {   
-        $parametros = $request->getQueryParams();
+        $header = $request->getHeaderLine('Authorization');
+        $token = trim(explode("Bearer", $header)[1]);
 
-        $rol = $parametros['rol'];
-
-        if ($rol === "Socio" || $rol === $this->autorizado) 
+        if(AutentificadorJWT::VerificarTipo($token, $this->autorizado)) 
         {
             $response = $handler->handle($request);
         } 

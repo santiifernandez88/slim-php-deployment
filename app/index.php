@@ -20,6 +20,7 @@ include './controllers/empleadoController.php';
 include './controllers/mesaController.php';
 include './controllers/ProductoPedidoController.php';
 include './controllers/archivoController.php';
+include './controllers/loginController.php';
 //include './middlewares/loggerMiddleware.php';
 include './middlewares/authMiddleware.php';
 
@@ -36,6 +37,11 @@ $app->addErrorMiddleware(true, true, true);
 $app->addBodyParsingMiddleware();
 
 // Routes
+$app->group('/login', function (RouteCollectorProxy $group) {
+    $group->post('[/]', \LoginController::class . ':LogIn');
+});
+
+
 $app->group('/productos', function (RouteCollectorProxy $group) 
 {
     $group->get('[/]', \ProductoController::class . ':TraerTodos');
@@ -61,7 +67,6 @@ $app->group('/pedidos', function (RouteCollectorProxy $group)
     $group->get('/{id}', \PedidoController::class . ':TraerUno');
     $group->post('[/]', \PedidoController::class . ':Insertar');
     //$group->put('/{id}', \PedidoController::class . ':Modificar');
-    //$group->put('/{id}', \PedidoController::class . ':ModificarEstadoTiempo');
     $group->delete('[/]', \PedidoController::class . ':Borrar');
 });
 
@@ -79,13 +84,21 @@ $app->group('/mesas', function (RouteCollectorProxy $group)
     $group->delete('[/]', \MesaController::class . ':Borrar');
 })->add(new AuthMiddleware("Mozo"));;
 
+$app->group('/mesasUsada', function (RouteCollectorProxy $group) 
+{
+    $group->get('[/]', \MesaController::class . ':TraerMesaMasUsada');
+})->add(new AuthMiddleware());;
+
+
 $app->group('/encuestas', function (RouteCollectorProxy $group) 
 {
+    $group->get('/comentarios', \EncuestaController::class . ':TraerMejoresComentarios');
     $group->get('[/]', \EncuestaController::class . ':TraerTodos');
     $group->get('/{id}', \EncuestaController::class . ':TraerUno');
     $group->post('[/]', \EncuestaController::class . ':Insertar');
     $group->put('/{id}', \EncuestaController::class . ':Modificar');
     $group->delete('[/]', \EncuestaController::class . ':Borrar');
+    
 })->add(new AuthMiddleware());
 
 $app->group('/productopedido', function (RouteCollectorProxy $group) 
