@@ -11,14 +11,13 @@ class ProductoController implements IApiUsable
 
         $parametros = $request->getParsedBody();
 
-        if(isset($parametros['nombre']) && isset($parametros['precio']) && isset($parametros['tipo']) && isset($parametros['tiempo']) && self::ValidarTipo($parametros['tipo']))
+        if(isset($parametros['nombre']) && isset($parametros['precio']) && isset($parametros['tipo']) && self::ValidarTipo($parametros['tipo']))
         {
             $producto = new Producto();
             $producto->nombre = $parametros['nombre'];
             $producto->precio = $parametros['precio'];
             $producto->tipo = $parametros['tipo'];
-            $producto->tiempo = $parametros['tiempo'];
-            $prdoducto->estado = "Activo";
+            $producto->estado = "Activo";
             Producto::InsertarProducto($producto);
             $payload = json_encode(array("mensaje" => "Producto creado con exito."));
         }

@@ -66,13 +66,13 @@ $app->group('/pedidos', function (RouteCollectorProxy $group)
     $group->get('[/]', \PedidoController::class . ':TraerTodos');
     $group->get('/{id}', \PedidoController::class . ':TraerUno');
     $group->post('[/]', \PedidoController::class . ':Insertar');
-    //$group->put('/{id}', \PedidoController::class . ':Modificar');
+    $group->put('/{id}', \PedidoController::class . ':Modificar');
     $group->delete('[/]', \PedidoController::class . ':Borrar');
 });
 
 $app->group('/pedidos', function (RouteCollectorProxy $group) 
 {
-    $group->put('/{id}', \PedidoController::class . ':ModificarEstadoTiempo');
+    $group->put('/estadoTiempo/{id}', \PedidoController::class . ':ModificarEstadoTiempo');
 });
 
 $app->group('/mesas', function (RouteCollectorProxy $group) 
@@ -105,6 +105,7 @@ $app->group('/productopedido', function (RouteCollectorProxy $group)
 {
     $group->get('[/]', \ProductoPedidoController::class . ':TraerTodos');
     $group->get('/{id}', \ProductoPedidoController::class . ':TraerUno');
+    $group->get('/tipoProducto/{tipoProducto}', \ProductoPedidoController::class . ':TraerTipoProducto');
     $group->post('[/]', \ProductoPedidoController::class . ':Insertar');
     $group->put('/{id}', \ProductoPedidoController::class . ':Modificar');
     $group->delete('[/]', \ProductoPedidoController::class . ':Borrar');

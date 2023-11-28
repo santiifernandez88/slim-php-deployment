@@ -42,6 +42,16 @@ class ProductoPedido
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
     }
 
+    public static function TraerTipoProducto($tipoDeseado)
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT pp.* FROM productopedido pp JOIN productos p ON pp.idProducto = p.id WHERE p.tipo = :TipoDeseado");
+        $consulta->bindValue(':TipoDeseado', $tipoDeseado);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'ProductoPedido');
+    }
+
     public static function TraerUno($id)
     {
         $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
@@ -56,9 +66,10 @@ class ProductoPedido
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
-        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productopedido SET idProducto = :idProducto, idPedido = :idPedido, cantidad = :cantidad, tiempo = :tiempo , estado = :estado WHERE id = :id");
+        $consulta = $objAccesoDato->RetornarConsulta("UPDATE productopedido SET idProducto = :idProducto, idPedido = :idPedido, idEmpleado = :idEmpleado, cantidad = :cantidad, tiempo = :tiempo , estado = :estado WHERE id = :id");
         $consulta->bindValue(':idProducto', $productoPedido->idProducto);
         $consulta->bindValue(':idPedido', $productoPedido->idPedido);
+        $consulta->bindValue(':idEmpleado', $productoPedido->idEmpleado);
         $consulta->bindValue(':cantidad', $productoPedido->cantidad);
         $consulta->bindValue(':tiempo', $productoPedido->tiempo);
         $consulta->bindValue(':estado', $productoPedido->estado);

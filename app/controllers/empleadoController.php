@@ -63,11 +63,13 @@ class EmpleadoController implements IApiUsable
 
         var_dump($empleado);
 
-        if(isset($parametros['rol']) && isset($parametros['nombre']) && isset($parametros['disponible']) && isset($parametros['estado']) && self::ValidarRol($parametros['rol']) && self::ValidarEstado($parametros['estado']) && self::ValidarDisponibilidad($parametros['disponible']))
+        if(isset($parametros['rol']) && isset($parametros['nombre']) && isset($parametros['disponible']) && isset($parametros['usuario']) && isset($parametros['contrasenia']) && isset($parametros['estado']) && self::ValidarRol($parametros['rol']) && self::ValidarEstado($parametros['estado']) && self::ValidarDisponibilidad($parametros['disponible']))
         {
             $empleado->rol = $parametros['rol'];
             $empleado->nombre = $parametros['nombre'];
             $empleado->disponible = $parametros['disponible'];
+            $empleado->usuario = $parametros['usuario'];
+            $empleado->contrasenia = $parametros['contrasenia'];
             $empleado->estado = $parametros['estado'];
 
             Empleado::ModificarEmpleado($empleado);

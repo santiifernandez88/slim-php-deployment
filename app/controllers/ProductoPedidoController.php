@@ -56,6 +56,26 @@ class ProductoPedidoController  implements IApiUsable
 
     }
 
+    public function TraerTipoProducto($request, $response, $args)
+    {
+        $tipoProducto = $args['tipoProducto'];
+        $productoPedidosTipoProductos = ProductoPedido::TraerTipoProducto($tipoProducto);
+        if($productoPedidosTipoProductos != false)
+        {
+            $payload = json_encode($productoPedidosTipoProductos);
+        }
+        else
+        {
+            $payload = json_encode(array("error" => "No se pudo encontrar productos con ese tipo."));
+        }
+
+    
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+
+    }
+
     public function TraerUno($request, $response, $args)
     {
         $id = $args['id'];
@@ -72,12 +92,12 @@ class ProductoPedidoController  implements IApiUsable
         $parametros = $request->getParsedBody();
         $id = $args['id'];
         $productoPedido = ProductoPedido::TraerUno($id);
-
-        if(isset($parametros['idProducto']) && isset($parametros['idPedido']) && isset($parametros['cantidad']) && isset($parametros['tiempo']) && isset($parametros['estado']))
+        if(isset($parametros['idProducto']) && isset($parametros['idPedido']) && isset($parametros['cantidad']) && isset($parametros['idEmpleado']) && isset($parametros['tiempo']) && isset($parametros['estado']))
         {
             $productoPedido->idProducto = $parametros['idProducto'];
             $productoPedido->idPedido = $parametros['idPedido'];
             $productoPedido->cantidad = $parametros['cantidad'];
+            $productoPedido->idEmpleado = $parametros['idEmpleado'];
             $productoPedido->tiempo = $parametros['tiempo'];
             $productoPedido->estado = $parametros['estado'];
 
