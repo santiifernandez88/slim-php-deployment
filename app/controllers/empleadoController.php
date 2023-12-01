@@ -44,6 +44,18 @@ class EmpleadoController implements IApiUsable
 
     }
 
+    public function TraerEmpleadosDisponibles($request, $response, $args)
+    {
+        $lista = Empleado::TraerEmpleadosDisponibles();
+
+        $payload = json_encode($lista);
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+
+    }
+
     public function TraerUno($request, $response, $args)
     {
         $id = $args['id'];

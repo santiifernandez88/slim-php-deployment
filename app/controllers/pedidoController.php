@@ -101,12 +101,19 @@ class PedidoController implements IApiUsable
     {    
         $id = $args['id'];
         $pedido = Pedido::TraerUno($id);
-
-        $pedido->estado = ProductoPedidoController::EvaluarEstado($pedido->id);
-        $pedido->tiempoEstimado = ProductoPedidoController::EvaluarTiempo($pedido->id);
-
-        Pedido::ModificarPedidoEstadoTiempo($pedido);
-        $payload = json_encode(array("mensaje" => "Pedido modificado con exito."));
+        if($pedido != false)
+        {
+            $pedido->estado = ProductoPedidoController::EvaluarEstado($pedido->id);
+            $pedido->tiempoEstimado = ProductoPedidoController::EvaluarTiempo($pedido->id);
+    
+            Pedido::ModificarPedidoEstadoTiempo($pedido);
+            $payload = json_encode(array("mensaje" => "Pedido modificado con exito."));
+        }
+        else
+        {
+            $payload = json_encode(array("mensaje" => "No se puedo mofificar el pedido con exito."));
+        }
+        
 
         $response->getBody()->write($payload);
         return $response

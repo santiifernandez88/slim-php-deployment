@@ -42,6 +42,15 @@ class Pedido
         return $consulta->fetchObject('Pedido');
     }
 
+    public static function TraerMesaMasUsada()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT numeroMesa, COUNT(numeroMesa) AS cantidad FROM pedidos GROUP BY numeroMesa ORDER BY cantidad DESC LIMIT 1;");
+        $consulta->execute();
+
+        return $consulta->fetch(PDO::FETCH_ASSOC);
+    }
+
     public static function ModificarPedido($pedido)
     {
         $objAccesoDato = AccesoDatos::dameUnObjetoAcceso();

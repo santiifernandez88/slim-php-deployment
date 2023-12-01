@@ -54,6 +54,7 @@ $app->group('/productos', function (RouteCollectorProxy $group)
 $app->group('/empleados', function (RouteCollectorProxy $group) 
 {
     $group->get('[/]', \EmpleadoController::class . ':TraerTodos');
+    $group->get('/disponibles', \EmpleadoController::class . ':TraerEmpleadosDisponibles');
     $group->get('/{id}', \EmpleadoController::class . ':TraerUno');
     $group->post('[/]', \EmpleadoController::class . ':Insertar');
     $group->put('/{id}', \EmpleadoController::class . ':Modificar');

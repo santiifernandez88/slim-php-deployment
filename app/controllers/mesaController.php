@@ -54,6 +54,26 @@ class MesaController implements IApiUsable
           ->withHeader('Content-Type', 'application/json');
     }
 
+    public function TraerMesaMasUsada($request, $response, $args)
+    {
+        $mesaUsada = Pedido::TraerMesaMasUsada();
+
+        if($mesaUsada != false) 
+        {
+            $mensaje = "La mesa más usada es la número " . $mesaUsada['numeroMesa'] . " con una cantidad de " . $mesaUsada['cantidad'] . " veces.";
+        } 
+        else
+        {
+            $mensaje = "No se encontró información sobre la mesa más usada.";
+        }
+
+        $payload = json_encode(array("mensaje" => $mensaje));
+
+        $response->getBody()->write($payload);
+        return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
     public function Modificar($request, $response, $args)
     {
         $parametros = $request->getParsedBody();

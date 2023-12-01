@@ -70,6 +70,15 @@ class Encuesta
         $consulta->bindValue(':estado', $encuesta->estado);
         $consulta->execute();
     }
+
+    public static function TraerMejoresComentarios()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM encuestas ORDER BY puntuacionRestaurant DESC");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Encuesta');
+    }
 }
 
 

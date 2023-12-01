@@ -65,6 +65,15 @@ class Empleado
         $consulta->execute();
     }
 
+    public static function TraerEmpleadosDisponibles()
+    {
+        $objAccesoDatos = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objAccesoDatos->RetornarConsulta("SELECT * FROM empleados WHERE estado = 'Presente'");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Empleado');
+    }
+
     public static function TraerUsuarioPorLogin($usuario, $contrasenia)
     {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 

@@ -101,6 +101,12 @@ class ProductoPedidoController  implements IApiUsable
             $productoPedido->tiempo = $parametros['tiempo'];
             $productoPedido->estado = $parametros['estado'];
 
+            $empleadoACargo = Empleado::TraerUno($productoPedido->idEmpleado);
+            if($empleadoACargo != false)
+            {
+                $empleadoACargo->disponible = "False";
+                Empleado::modificarEmpleado($empleadoACargo);
+            }
             ProductoPedido::ModificarProductoPedido($productoPedido);
             $payload = json_encode(array("mensaje" => "Producto modificado con exito."));
         }
@@ -152,13 +158,19 @@ class ProductoPedidoController  implements IApiUsable
         foreach($productoPedidos as $productos)
         {
             if($productos->idPedido == $idPedido && $productos->idEmpleado > 0 && $productos->estado != "Cancelado")
-            {
+            { 
                 $estadoPedido = "Preparacion";
                 if($productos->estado == "Realizado")
                 {
-                    $estadoPedido = "Entregado";
+                    $empleadoACargo = Empleado::TraerUno($producto->idEmpleado);
+                    if($empleadoACargo != false)
+                    {
+                        $empleadoACargo->disponible = "True";
+                        Empleado::modificarEmpleado($empleadoACargo);
+                        $estadoPedido = "Entregado";
+                    }
                 }
-                break;
+                break;       
             }
         }
 

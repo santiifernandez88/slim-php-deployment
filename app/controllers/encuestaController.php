@@ -106,6 +106,18 @@ class EncuestaController implements IApiUsable
           ->withHeader('Content-Type', 'application/json');
     }
 
+    public function TraerMejoresComentarios($request, $response, $args)
+    {
+        $lista = Encuesta::TraerMejoresComentarios();
+
+        $payload = json_encode($lista);
+
+        $response->getBody()->write($payload);
+        return $response
+          ->withHeader('Content-Type', 'application/json');
+
+    }
+
 }
 
 
